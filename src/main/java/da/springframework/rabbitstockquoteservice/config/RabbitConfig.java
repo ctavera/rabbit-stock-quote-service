@@ -5,9 +5,7 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Mono;
-import reactor.rabbitmq.RabbitFlux;
-import reactor.rabbitmq.Sender;
-import reactor.rabbitmq.SenderOptions;
+import reactor.rabbitmq.*;
 
 import javax.annotation.PreDestroy;
 
@@ -32,5 +30,11 @@ public class RabbitConfig {
     Sender sender(Mono<Connection> mono) {
         // Sender use the cache connection for efficiency
         return RabbitFlux.createSender(new SenderOptions().connectionMono(mono));
+    }
+
+    @Bean
+    Receiver receiver(Mono<Connection> mono) {
+        // Receiver use the cache connection for efficiency
+        return RabbitFlux.createReceiver(new ReceiverOptions().connectionMono(mono));
     }
 }
